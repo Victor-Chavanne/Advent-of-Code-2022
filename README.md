@@ -2,7 +2,7 @@
 
 ## Description
 My personal go at the [Advent of Code](https://adventofcode.com/) 2022 puzzles.  
-⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐
 
 ## Installation
 Install dependencies with pip:

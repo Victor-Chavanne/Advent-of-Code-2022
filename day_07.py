@@ -2,9 +2,14 @@
 This is Victor Chavanne's answers to day 7 of advent of code 2022 puzzles.
 """
 
-from pprint import pprint
 
 def build_tree():
+    """This method reads the input file and return a dictionary of file sizes.
+
+    :return: A dictionary of file sizes
+    :rtype: dict
+    """
+
     with open("inputs/day_07", "r", encoding="utf_8") as input_file:
         current_directory = ""
         path_sizes = {}
@@ -20,53 +25,59 @@ def build_tree():
                 case ["$", "cd", dire]:
                     if dire.startswith("/"):
                         current_directory = f"{dire}/"
-                        current_path_list = ["/".join(dire.split("/")[:x+1]) for x in range(len(dire.split("/")))]
+                        current_path_list = ["/".join(dire.split("/")[:x+1])
+                                             for x
+                                             in range(len(dire.split("/")))]
                     else:
                         current_directory += f"{dire}/"
                         current_path_list.append(current_directory)
                 case ["$", "ls"]:
                     pass
-                case ["dir", dir_name]:
+                case ["dir", _]:
                     pass
-                case [file_size, file_name] if file_size[0] in "0123456789":
-                    for p in current_path_list:
-                        if p not in path_sizes:
-                            path_sizes[p] = 0
-                        path_sizes[p] += int(file_size)
+                case [file_size, _] if file_size[0] in "0123456789":
+                    for path in current_path_list:
+                        if path not in path_sizes:
+                            path_sizes[path] = 0
+                        path_sizes[path] += int(file_size)
 
     return path_sizes
 
 
-
-
 def puzzle_one():
-    """This method looks for start-of-packet marker.
-    It return the number of characters needed to be processed to find the first.
+    """This method returns the total sums of directory smaller than 100000.
 
-    :return: The number of characters processed
+    :return: The sum of directory sizes
     :rtype: int
     """
 
     result = 0
 
     tree = build_tree()
-    for k in tree.keys():
-        if tree[k] <= 100000:
-            result += tree[k]
+    for value in tree.values():
+        if value <= 100000:
+            result += value
 
     return result
 
 
 def puzzle_two():
-    """This method looks for end-of-packet marker.
-    It return the number of characters needed to be processed to find the first.
+    """This method returns the size of the smallest package big enough to free 30000000.
 
-    :return: The number of characters processed
+    :return: The size of the package.
     :rtype: int
     """
 
-    result = 0
-    return result
+    tree = build_tree()
+    available_space = 70000000 - tree["/"]
+    needed_space = 30000000 - available_space
+
+    smallest_sufficient = tree["/"]
+    for value in tree.values():
+        if needed_space <= value < smallest_sufficient:
+            smallest_sufficient = value
+
+    return smallest_sufficient
 
 
 if __name__ == "__main__":

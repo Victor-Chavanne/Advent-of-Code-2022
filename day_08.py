@@ -97,9 +97,9 @@ def get_tree_score(canopy, col, row):
 
 
 def puzzle_two():
-    """This method returns the size of the smallest package big enough to free 30000000.
+    """This method returns the max number of visible trees from the location..
 
-    :return: The size of the package.
+    :return: The number of visible trees.
     :rtype: int
     """
 

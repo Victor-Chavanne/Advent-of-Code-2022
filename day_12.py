@@ -33,16 +33,16 @@ def get_possible_connections(map, dist_map, node):
     possible_connections = []
 
     if x-1 >= 0:
-        if map[y][x-1] - map[y][x] <= 1 and dist_map[y][x-1] < 0:
+        if map[y][x-1] - map[y][x] <= 1 and dist_map[y][x-1] > dist_map[y][x] + 1:
             possible_connections.append((x-1, y))
     if x+1 < len(map[0]):
-        if map[y][x+1] - map[y][x] <= 1 and dist_map[y][x+1] < 0:
+        if map[y][x+1] - map[y][x] <= 1 and dist_map[y][x+1] > dist_map[y][x] + 1:
             possible_connections.append((x+1, y))
     if y-1 >= 0:
-        if map[y-1][x] - map[y][x] <= 1 and dist_map[y-1][x] < 0:
+        if map[y-1][x] - map[y][x] <= 1 and dist_map[y-1][x] > dist_map[y][x] + 1:
             possible_connections.append((x, y-1))
     if y+1 < len(map):
-        if map[y+1][x] - map[y][x] <= 1 and dist_map[y+1][x] < 0:
+        if map[y+1][x] - map[y][x] <= 1 and dist_map[y+1][x] > dist_map[y][x] + 1:
             possible_connections.append((x, y+1))
 
     return possible_connections
@@ -57,7 +57,7 @@ def pathfinder(start, end, map):
     :return:
     """
 
-    dist_map = [[-1 for _ in line] for line in map]
+    dist_map = [[1000 for _ in line] for line in map]
     dist_map[start[1]][start[0]] = 0
 
     nodes_to_inspect = [start]
@@ -65,10 +65,10 @@ def pathfinder(start, end, map):
     while len(nodes_to_inspect) != 0:
         focus_node = nodes_to_inspect[0]
 
-        if focus_node == end:
+        #if focus_node == end:
             #for line in dist_map:
                 #print(line)
-            return dist_map[focus_node[1]][focus_node[0]]
+            #return dist_map[focus_node[1]][focus_node[0]]
 
         focus_value = dist_map[focus_node[1]][focus_node[0]]
         for node in get_possible_connections(map, dist_map, focus_node):
@@ -76,8 +76,9 @@ def pathfinder(start, end, map):
             dist_map[node[1]][node[0]] = focus_value + 1
         nodes_to_inspect.pop(0)
 
-    pprint(dist_map)
-    return 0
+    for line in dist_map:
+        print(line)
+    return dist_map[end[1]][end[0]]
 
 def puzzle_one():
     """This method returns the product of the number of items inspected by the 2 most productive monkeys.
